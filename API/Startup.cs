@@ -35,6 +35,8 @@ namespace API
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
             services.AddControllers();
+            services.AddCors(); //this method allows us to bypass cors error due to differing origins like localhost4100 and localhost5100, etc
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -54,6 +56,8 @@ namespace API
             app.UseHttpsRedirection(); //if from http address then redirected to https end point
 
             app.UseRouting();
+
+            app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200")); //our cors method saying we can do any method/header as long as its from locaion 4200 local host
 
             app.UseAuthorization();
 
